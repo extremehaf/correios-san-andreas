@@ -34,47 +34,47 @@ namespace correios_san_andreas
                 _aVisitar = new List<No>();
             }
 
-            public void MarcarComoVisitado(No node)
+            public void MarcarComoVisitado(No no)
             {
-                if (!_visitados.Contains(node))
-                    _visitados.Add((node));
+                if (!_visitados.Contains(no))
+                    _visitados.Add((no));
             }
 
-            public bool FoiVisitado(No node)
+            public bool FoiVisitado(No no)
             {
-                return _visitados.Contains(node);
+                return _visitados.Contains(no);
             }
 
-            public void AtualizarEstimativa(No node, PesoEstimativa novoPeso)
+            public void AtualizarEstimativa(No no, PesoEstimativa novoPeso)
             {
-                if (!_pesos.ContainsKey(node))
+                if (!_pesos.ContainsKey(no))
                 {
-                    _pesos.Add(node, novoPeso);
+                    _pesos.Add(no, novoPeso);
                 }
                 else
                 {
-                    _pesos[node] = novoPeso;
+                    _pesos[no] = novoPeso;
                 }
             }
 
-            public PesoEstimativa DescobrirPeso(No node)
+            public PesoEstimativa DescobrirPeso(No no)
             {
                 PesoEstimativa result;
-                if (!_pesos.ContainsKey(node))
+                if (!_pesos.ContainsKey(no))
                 {
                     result = new PesoEstimativa(null, int.MaxValue);
-                    _pesos.Add(node, result);
+                    _pesos.Add(no, result);
                 }
                 else
                 {
-                    result = _pesos[node];
+                    result = _pesos[no];
                 }
                 return result;
             }
 
-            public void AdicionarNoParaVisita(No node)
+            public void AdicionarNoParaVisita(No no)
             {
-                _aVisitar.Add(node);
+                _aVisitar.Add(no);
             }
 
             public bool ExiteNosNaoVisitados => _aVisitar.Count > 0;
@@ -86,14 +86,14 @@ namespace correios_san_andreas
                 return result;
             }
 
-            public bool HasComputedPathToOrigin(No node)
+            public bool CaminhoJaPreenchido(No no)
             {
-                return DescobrirPeso(node).Origem != null;
+                return DescobrirPeso(no).Origem != null;
             }
 
-            public IEnumerable<No> ComputedPathToOrigin(No node)
+            public IEnumerable<No> RetornaCaminhoOrigem(No no)
             {
-                var n = node;
+                var n = no;
                 while (n != null)
                 {
                     yield return n;
@@ -142,8 +142,8 @@ namespace correios_san_andreas
                 }
             }
             //opos descobrir o menor caminho entre os nós, faz o caminho reverso do no de destino ate a origem
-            return controle.HasComputedPathToOrigin(destino)
-                ? controle.ComputedPathToOrigin(destino).Reverse().ToArray()
+            return controle.CaminhoJaPreenchido(destino)
+                ? controle.RetornaCaminhoOrigem(destino).Reverse().ToArray()
                 : null;
         }
     }
